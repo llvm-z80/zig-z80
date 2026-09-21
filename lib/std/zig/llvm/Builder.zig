@@ -147,6 +147,7 @@ pub fn tripleForTarget(allocator: Allocator, target: *const std.Target) ![]const
         .wasm32 => "wasm32",
         .wasm64 => "wasm64",
         .ve => "ve",
+        .sm83 => "sm83",
 
         .alpha,
         .arceb,
@@ -561,6 +562,7 @@ pub const DataLayout = struct {
             .loongarch32 => "e-m:e-p:32:32-i64:64-n32-S128",
             .loongarch64 => "e-m:e-p:64:64-i64:64-i128:128-n32:64-S128",
             .xtensa => "e-m:e-p:32:32-i8:8:32-i16:16:32-i64:64-n32",
+            .sm83 => "e-m:o-p:16:8-i16:8-i32:8-i64:8-i128:8-f32:8-f64:8-ve-n8:16",
 
             .alpha,
             .arceb,

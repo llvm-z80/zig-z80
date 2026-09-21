@@ -229,6 +229,7 @@ pub fn hasLlvmSupport(target: *const std.Target, ofmt: std.Target.ObjectFormat) 
         .riscv32be,
         .riscv64,
         .riscv64be,
+        .sm83,
         .sparc,
         .sparc64,
         .spirv32,

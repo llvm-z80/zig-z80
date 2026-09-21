@@ -2343,6 +2343,7 @@ pub const TargetQuery = struct {
         s390x,
         sh,
         sheb,
+        sm83,
         sparc,
         sparc64,
         spork8,

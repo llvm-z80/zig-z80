@@ -793,6 +793,7 @@ pub const propeller = @import("Target/propeller.zig");
 pub const riscv = @import("Target/riscv.zig");
 pub const s390x = @import("Target/s390x.zig");
 pub const sh = @import("Target/generic.zig");
+pub const sm83 = @import("Target/generic.zig");
 pub const sparc = @import("Target/sparc.zig");
 pub const spirv = @import("Target/spirv.zig");
 pub const spork8 = @import("Target/generic.zig");
@@ -1120,6 +1121,7 @@ pub fn toElfMachine(target: *const Target) std.elf.EM {
         .riscv32, .riscv32be, .riscv64, .riscv64be => .RISCV,
         .s390x => .S390,
         .sh, .sheb => .SH,
+        .sm83 => .Z80,
         .sparc => if (target.cpu.hasAny(.sparc, &.{ .v8plus, .v9 })) .SPARC32PLUS else .SPARC,
         .sparc64 => .SPARCV9,
         .ve => .VE,
@@ -1190,6 +1192,7 @@ pub fn toCoffMachine(target: *const Target) std.coff.IMAGE.FILE.MACHINE {
         .riscv64be,
         .s390x,
         .sheb,
+        .sm83,
         .sparc,
         .sparc64,
         .spirv32,
@@ -1405,6 +1408,7 @@ pub const Cpu = struct {
         s390x,
         sh,
         sheb,
+        sm83,
         sparc,
         sparc64,
         spork8,
@@ -1452,6 +1456,7 @@ pub const Cpu = struct {
             riscv,
             s390x,
             sh,
+            sm83,
             sparc,
             spirv,
             ve,
@@ -1492,6 +1497,7 @@ pub const Cpu = struct {
                 .riscv32, .riscv32be, .riscv64, .riscv64be => .riscv,
                 .s390x => .s390x,
                 .sh, .sheb => .sh,
+                .sm83 => .sm83,
                 .sparc, .sparc64 => .sparc,
                 .spirv32, .spirv64 => .spirv,
                 .ve => .ve,
@@ -1729,6 +1735,7 @@ pub const Cpu = struct {
                 .riscv32,
                 .riscv64,
                 .sh,
+                .sm83,
                 .thumb,
                 .ve,
                 .wasm32,
@@ -2023,6 +2030,9 @@ pub const Cpu = struct {
                 .ez80_cet,
                 .ez80_tiflags,
                 => &.{.ez80},
+
+                .sm83_c,
+                => &.{.sm83},
 
                 .spork8,
                 => &.{.spork8},
@@ -2985,6 +2995,7 @@ pub fn ptrBitWidth_arch_abi(cpu_arch: Cpu.Arch, abi: Abi) u16 {
     return switch (cpu_arch) {
         .avr,
         .msp430,
+        .sm83,
         .x86_16,
         .spork8,
         => 16,
@@ -3233,7 +3244,9 @@ pub fn cTypeBitSize(target: *const Target, c_type: CType) ?u16 {
                 .float, .long, .ulong => 32,
                 .longlong, .ulonglong, .double, .longdouble => 64,
             },
-            .avr => switch (c_type) {
+            .avr,
+            .sm83,
+            => switch (c_type) {
                 .char => 8,
                 .short, .ushort, .int, .uint => 16,
                 .long, .ulong, .float, .double, .longdouble => 32,
@@ -3569,6 +3582,7 @@ pub fn cTypeAlignment(target: *const Target, c_type: CType) ?u16 {
     switch (target.cpu.arch) {
         .avr,
         .ez80,
+        .sm83,
         .spork8,
         => return 1,
         .x86 => switch (target.os.tag) {
@@ -3668,6 +3682,7 @@ pub fn cTypeAlignment(target: *const Target, c_type: CType) ?u16 {
 
             .avr,
             .ez80,
+            .sm83,
             .spork8,
             => unreachable, // Handled above.
         }),
@@ -3678,6 +3693,7 @@ pub fn cMaxIntAlignment(target: *const Target) u16 {
     return switch (target.cpu.arch) {
         .avr,
         .ez80,
+        .sm83,
         .spork8,
         => 1,
 
@@ -3824,6 +3840,7 @@ pub fn cCallingConvention(target: *const Target) ?std.builtin.CallingConvention 
         .nvptx, .nvptx64 => .nvptx_device,
         .spirv32, .spirv64 => .spirv_device,
         .ez80 => .ez80_cet,
+        .sm83 => .sm83_c,
         .spork8 => .spork8,
     };
 }
