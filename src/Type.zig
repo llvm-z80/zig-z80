@@ -1204,7 +1204,10 @@ pub fn abiSize(ty: Type, zcu: *const Zcu) u64 {
 }
 
 pub fn ptrAbiAlignment(target: *const Target) Alignment {
-    return .fromNonzeroByteUnits(@divExact(target.ptrBitWidth(), 8));
+    switch (target.cpu.arch) {
+        .sm83 => return .fromNonzeroByteUnits(1),
+        else => return .fromNonzeroByteUnits(@divExact(target.ptrBitWidth(), 8)),
+    }
 }
 pub fn ptrAbiSize(target: *const Target) u64 {
     return @divExact(target.ptrBitWidth(), 8);

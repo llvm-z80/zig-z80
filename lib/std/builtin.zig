@@ -341,6 +341,9 @@ pub const CallingConvention = union(enum(u8)) {
     spirv_fragment,
     spirv_vertex,
 
+    // Calling convention for the `sm83` architecture.
+    sm83_c,
+
     /// Options shared across most calling conventions.
     pub const CommonOptions = struct {
         /// The boundary the stack is aligned to when the function is called.

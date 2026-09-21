@@ -2182,6 +2182,9 @@ pub const EM = enum(u16) {
     /// This value is an unofficial ELF value used in: https://github.com/ne75/llvm-project
     PROPELLER2 = 300,
 
+    /// Compatibility mapping for Z80 LLVM fork.
+    Z80_LLVM_FORK = 8080,
+
     _,
 };
 

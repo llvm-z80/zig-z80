@@ -75,6 +75,7 @@ pub fn targetTriple(allocator: Allocator, target: *const std.Target) ![]const u8
         .mips64 => if (target.cpu.has(.mips, .mips64r6)) "mipsisa64r6" else "mips64",
         .mips64el => if (target.cpu.has(.mips, .mips64r6)) "mipsisa64r6el" else "mips64el",
         .msp430 => "msp430",
+        .sm83 => "sm83",
         .powerpc => "powerpc",
         .powerpcle => "powerpcle",
         .powerpc64 => "powerpc64",
@@ -415,6 +416,7 @@ pub fn dataLayout(target: *const std.Target) []const u8 {
             "E-m:e-p:64:64-i64:64-i128:128-n32:64-S64"
         else
             "E-m:e-p:64:64-i64:64-i128:128-n32:64-S128",
+        .sm83 => "e-m:o-p:16:8-i16:8-i32:8-i64:8-i128:8-f32:8-f64:8-ve-n8:16",
         .sparc => "E-m:e-p:32:32-i64:64-i128:128-f128:64-n32-S64",
         .sparc64 => "E-m:e-i64:64-i128:128-n32:64-S128",
         .s390x => "E-m:e-i1:8:16-i8:8:16-i64:64-f128:64-v128:64-a:8:16-n32:64",
@@ -4535,6 +4537,7 @@ pub fn toLlvmCallConvTag(cc_tag: std.builtin.CallingConvention.Tag, target: *con
         .spirv_kernel,
         .spirv_fragment,
         .spirv_vertex,
+        .sm83_c,
         => null,
     };
 }
