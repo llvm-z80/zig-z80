@@ -3078,7 +3078,7 @@ pub fn cTypeBitSize(target: *const Target, c_type: CType) u16 {
                 .float, .long, .ulong => return 32,
                 .longlong, .ulonglong, .double, .longdouble => return 64,
             },
-            .avr => switch (c_type) {
+            .avr, .sm83 => switch (c_type) {
                 .char => return 8,
                 .short, .ushort, .int, .uint => return 16,
                 .long, .ulong, .float, .double, .longdouble => return 32,
@@ -3529,6 +3529,8 @@ pub fn cTypePreferredAlignment(target: *const Target, c_type: CType) u16 {
     return @min(
         std.math.ceilPowerOfTwoAssert(u16, (cTypeBitSize(target, c_type) + 7) / 8),
         @as(u16, switch (target.cpu.arch) {
+            .sm83 => 1,
+
             .x86_16, .msp430 => 2,
 
             .arc,
